@@ -10,7 +10,7 @@ nltk.download('punkt')
 import torch
 from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
-def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", max_chunk_length=1024, min_length=30, max_length=150):
+def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", max_chunk_length=1024, min_length=30, max_length=150, use_path=False):
     """
     Summarize a podcast transcript using a Hugging Face model.
     
@@ -32,9 +32,12 @@ def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", 
     summarizer = pipeline("summarization", model=model, tokenizer=tokenizer)
     
     # Read transcript
-    with open(transcript_path, 'r', encoding='utf-8') as file:
-        transcript = file.read()
-    
+    if use_path:
+        with open(transcript_path, 'r', encoding='utf-8') as file:
+            transcript = file.read()
+    else:
+        transcript = transcript_path
+        
     # For very long transcripts, we need to chunk the text
     if len(tokenizer.encode(transcript)) > max_chunk_length:
         # Split into chunks and summarize each
@@ -47,17 +50,8 @@ def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", 
             chunk_summaries.append(f"{summary}\n")
             print(i+1, summary)
         
-        # Combine chunk summaries and summarize again for cohesion
-        # combined_summary = " ".join(chunk_summaries)
-        # print("combined", combined_summary)
-        # if len(tokenizer.encode(combined_summary)) > max_chunk_length:
-        #     # If still too long, summarize the combined summaries
-        #     final_summary = summarizer(combined_summary, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
-        #     return final_summary
         return chunk_summaries
     else:
-        # If transcript is short enough, summarize directly
-        print("short input, directly creating")
         return summarizer(transcript, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
 
 def split_into_chunks(text, tokenizer, max_length):
