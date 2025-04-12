@@ -1,0 +1,18 @@
+# analyze_podcast_transcript:
+#   description: >
+#     Analyze the podcast episode transcript and summarize the key points, themes, and insights. Provide a concise summary that captures the essence of the episode, including any notable quotes or moments. The summary should be engaging and informative, suitable for potential listeners who want to understand the content of the episode without having to listen to the entire thing.
+
+#     Here is the meeting transcript for your reference:\n\n {transcript}
+
+#   expected_output: >
+#     A string that summarizes the podcast episode, highlighting key points, themes, and insights. The summary should be concise, engaging, and informative, suitable for potential listeners who want to understand the content of the episode without having to listen to the entire thing. It should also include any notable quotes or moments from the episode.
+#   agent: podcast_summarizer
+
+analyze_podcast_transcript:
+  description: >
+    Analyze the podcast episode transcript and generate an SEO-friendly summary that captures the key points, themes, and insights. The summary should be optimized for search engines while remaining engaging and informative for potential listeners. It should highlight notable quotes or moments and provide a concise overview of the episode's content, making it easier for users to discover and understand the podcast.
+    Here is the meeting transcript for your reference:\n\n {transcript}
+
+  expected_output: >
+    A string that summarizes the podcast episode, highlighting key points, themes, and insights. The summary should be concise, engaging, and informative, suitable for potential listeners who want to understand the content of the episode without having to listen to the entire thing. It should also include any notable quotes or moments from the episode.
+  agent: podcast_summarizer
