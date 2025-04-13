@@ -6,6 +6,7 @@ class SummarizerState(BaseModel):
     """State for the summarizer."""
     id: str = "summarizer_flow_state"
     transcript: str = "Podcast transcript goes here"
+    use_path: bool = False
     
     
 class SummarizerFlow(Flow[SummarizerState]):
@@ -14,9 +15,9 @@ class SummarizerFlow(Flow[SummarizerState]):
     
     @start()
     def load_transcript(self):
-        
-        with open('output.txt', 'r', encoding='utf-8') as f:
-            self.state.transcript = f.read()
+        if self.state.use_path:
+            with open(self.state.transcript, 'r', encoding='utf-8') as file:
+                self.state.transcript = file.read()
             
             
     @listen(load_transcript)
@@ -30,3 +31,4 @@ class SummarizerFlow(Flow[SummarizerState]):
         
         
         print("FLOW OUTPUT", output)
+        return output['summary']

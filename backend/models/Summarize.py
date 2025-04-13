@@ -1,14 +1,17 @@
 
 import nltk
+import torch
 from transformers import MarianMTModel, MarianTokenizer
 from transformers import BartTokenizer, BartForConditionalGeneration
 from nltk.tokenize import sent_tokenize
+from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
+
 
 nltk.download('punkt')
 
 
-import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
+LLM_SAFE_CONTEXT_LENGTH = 8192
+
 
 def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", max_chunk_length=1024, min_length=30, max_length=150, use_path=False):
     """
@@ -42,15 +45,18 @@ def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", 
     if len(tokenizer.encode(transcript)) > max_chunk_length:
         # Split into chunks and summarize each
         chunks = split_into_chunks(transcript, tokenizer, max_chunk_length)
+        safe_max_length = LLM_SAFE_CONTEXT_LENGTH // len(chunks)
         chunk_summaries = []
+        print(f"generating with max_length: {safe_max_length}")
+        
         
         for i, chunk in enumerate(chunks):
             print(f"Summarizing chunk {i+1}/{len(chunks)}...")
-            summary = summarizer(chunk, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
-            chunk_summaries.append(f"{summary}\n")
+            summary = summarizer(chunk, max_length=safe_max_length , min_length=min_length, do_sample=False)[0]['summary_text']
+            chunk_summaries.append(f"{summary}")
             print(i+1, summary)
         
-        return chunk_summaries
+        return "\n".join(chunk_summaries)
     else:
         return summarizer(transcript, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
 
