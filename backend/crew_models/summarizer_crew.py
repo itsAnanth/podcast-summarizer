@@ -37,5 +37,5 @@ class SummarizerCrew:
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,
-            verbose=True
+            verbose=False
         )
