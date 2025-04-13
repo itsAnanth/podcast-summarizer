@@ -27,9 +27,14 @@ def summarize_transcript(transcript_path, model_name="facebook/bart-large-cnn", 
     Returns:
         A summary of the transcript
     """
+    # device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+    
     # Load model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+    model.to(device)
     
     # Create summarization pipeline
     summarizer = pipeline("summarization", model=model, tokenizer=tokenizer)
