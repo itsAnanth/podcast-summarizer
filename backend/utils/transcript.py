@@ -1,13 +1,12 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 
-def get_transcript(video_id: str) -> str:
+def get_transcript(video_id: str, language=["en"]) -> str:
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-        
         try:
-            transcript = transcript_list.find_manually_created_transcript(['en'])
+            transcript = transcript_list.find_manually_created_transcript(language)
         except:
-            transcript = transcript_list.find_generated_transcript(['en'])
+            transcript = transcript_list.find_generated_transcript(language)
         
         full_transcript = transcript.fetch().to_raw_data()
         

@@ -16,3 +16,12 @@ analyze_podcast_transcript:
   expected_output: >
     A string that summarizes the podcast episode, highlighting key points, themes, and insights. The summary should be concise, engaging, and informative, suitable for potential listeners who want to understand the content of the episode without having to listen to the entire thing. It should also include any notable quotes or moments from the episode.
   agent: podcast_summarizer
+
+translate_podcast_transcript:
+  description: >
+  
+    Translate the podcast episode transcript from Malayalam to English. The translation should be accurate, culturally relevant, and suitable for the target audience. The translated transcript should be clear and easy to understand, preserving the tone and style of the original content.
+    Here is the meeting transcript for your reference:\n\n {transcript}
+  expected_output:
+    A string which is the translated podcast episode transcript in English. The translation should be accurate, culturally relevant, and suitable for the target audience. The translated transcript should be clear and easy to understand, preserving the tone and style of the original content.
+  agent: podcast_translator
